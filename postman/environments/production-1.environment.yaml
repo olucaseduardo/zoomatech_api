@@ -1,0 +1,5 @@
+name: production
+values:
+  - key: BASE_URL
+    value: ''
+color: 120

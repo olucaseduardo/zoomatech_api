@@ -1,0 +1,16 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/configuration/657473bf-ab3f-470d-b39f-f3fe3d141793"
+method: PATCH
+body:
+  type: json
+  content: |-
+    {
+        "value": "zoomatechjr@mail.com",
+        "description": "Email da zoomatech jr na tela inicial"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 4251414201526147

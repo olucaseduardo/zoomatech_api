@@ -1,0 +1,7 @@
+name: development
+values:
+  - key: BASE_URL
+    value: 'http://localhost:8080'
+  - key: TOKEN_ADMIN
+    value: ''
+color: 240

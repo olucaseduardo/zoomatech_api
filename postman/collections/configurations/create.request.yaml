@@ -1,0 +1,17 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/configuration/"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "key": "WHATSAPP_CONTACT",
+        "value": "(99) 9 9218-4187",
+        "description": "Número de whatsapp na tela inicial da empresa junior"
+    }
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1777827623793
