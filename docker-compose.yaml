@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db.wfmcqzpgcjmabrhqpolv.supabase.co:5432/postgres?sslmode=require
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=TlyDrC49wfromoV0
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_FLYWAY_ENABLED=false
+      - JWT_SECRET=6f1f08c647d3c895f108da63f9bad2e890967f301f3e01e87032deb293802d065b7a6d160d696048405bf271ddbb4376dbe3be2d283583fe623204ae6e88936a
+      - JWT_EXPIRATION=86400000
+      - JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true
