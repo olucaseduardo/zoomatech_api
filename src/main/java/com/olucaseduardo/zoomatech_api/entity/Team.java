@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.validator.constraints.URL;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -16,24 +18,34 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+public class Team {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(nullable = false)
     private UUID id;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
+    private String photo;
+
+    @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
+    private Boolean active;
+
+    @Column(nullable = false)
+    @URL(protocol = "https", message = "Deve ser uma url correta")
+    private String lattes;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Role role;
+
     @CreationTimestamp
     private Timestamp createdAt;
 
-    @Column(nullable = false)
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp updatedAt;
 }

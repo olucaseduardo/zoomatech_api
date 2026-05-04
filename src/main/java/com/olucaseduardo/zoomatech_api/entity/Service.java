@@ -6,34 +6,41 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table
-@Getter
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
-
+public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(nullable = false)
     private UUID id;
+
+    @Column(nullable = false)
+    private String icon;
+
+    @Column(nullable = false)
+    private String description;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String description;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false)
+    private Set<ServiceTopic> serviceTopic;
 
     @Column(nullable = false)
     @CreationTimestamp
     private Timestamp createdAt;
 
     @Column(nullable = false)
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp updatedAt;
 }

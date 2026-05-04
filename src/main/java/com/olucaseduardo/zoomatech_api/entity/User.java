@@ -37,7 +37,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private RoleUser role;
 
     @Override
     public Collection getAuthorities() {

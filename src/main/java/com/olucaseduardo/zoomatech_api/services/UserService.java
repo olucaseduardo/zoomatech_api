@@ -2,7 +2,7 @@ package com.olucaseduardo.zoomatech_api.services;
 
 import com.olucaseduardo.zoomatech_api.dto.auth.RegisterRequest;
 import com.olucaseduardo.zoomatech_api.dto.user.UpdateUserRequest;
-import com.olucaseduardo.zoomatech_api.entity.Role;
+import com.olucaseduardo.zoomatech_api.entity.RoleUser;
 import com.olucaseduardo.zoomatech_api.entity.User;
 import com.olucaseduardo.zoomatech_api.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -34,7 +34,7 @@ public class UserService {
         newUser.setFirstName(request.firstName());
         newUser.setLastName(request.lastName());
         newUser.setPassword(passwordEncoder.encode(request.password()));
-        newUser.setRole(Role.ADMIN);
+        newUser.setRole(RoleUser.ADMIN);
 
         return userRepository.save(newUser);
     }

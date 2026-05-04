@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Timestamp;
+import java.io.Serial;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,24 +16,30 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {
+public class ServiceTopic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(nullable = false)
     private UUID id;
 
     @Column(nullable = false)
-    private String name;
+    private String topic;
+
+    @Column(nullable = false)
+    private String type;
 
     @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
-    @CreationTimestamp
-    private Timestamp createdAt;
+    private List<String> items;
 
-    @Column(nullable = false)
-    @CreationTimestamp
-    private Timestamp updatedAt;
+    @ManyToOne
+    private Service service;
+
+
+
+
+
+
 }
