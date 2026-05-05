@@ -8,42 +8,47 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "service")
-@Builder
+@Table
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Service {
+public class WorkPerformed {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Lob
+    private byte[] photo;
+
     @Column(nullable = false)
-    private String icon;
+    private String title;
 
     @Column(nullable = false)
     private String description;
 
     @Column(nullable = false)
-    private String name;
+    private String performedAt;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
-    private Set<ServiceTopic> serviceTopic;
-
-    @ManyToMany(mappedBy = "services")
-    private Set<WorkPerformed> workPerformeds;
+    @ManyToMany
+    @JoinTable(
+            name = "service_performed",
+            joinColumns = @JoinColumn(name = "work_performed_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    private Set<Service> services;
 
     @Column(nullable = false)
     @CreationTimestamp
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
     @UpdateTimestamp
-    private Timestamp updatedAt;
+    private LocalDateTime updatedAt;
 }
