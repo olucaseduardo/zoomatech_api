@@ -1,0 +1,9 @@
+$kind: http-request
+name: find_by_id
+url: "{{BASE_URL}}/services/{{ID_SERVICE}}"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1778100000002

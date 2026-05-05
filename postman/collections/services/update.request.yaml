@@ -1,0 +1,17 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/services/{{ID_SERVICE}}"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: json
+  content: |-
+    {
+        "name": "Consultoria em TI Atualizada",
+        "description": "Serviços de consultoria especializada em tecnologia da informação e infraestrutura.",
+        "icon": "bi bi-laptop-fill"
+    }
+order: 1778100000003
