@@ -1,10 +1,7 @@
 package com.olucaseduardo.zoomatech_api.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
@@ -13,12 +10,13 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "member")
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Team {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,7 +26,8 @@ public class Team {
     private String name;
 
     @Column(nullable = false)
-    private String photo;
+    @Lob
+    private byte[] photo;
 
     @Column(nullable = false)
     private String description;
@@ -40,7 +39,8 @@ public class Team {
     @URL(protocol = "https", message = "Deve ser uma url correta")
     private String lattes;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private Role role;
 
     @CreationTimestamp
