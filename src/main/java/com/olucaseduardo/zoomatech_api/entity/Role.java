@@ -3,16 +3,17 @@ package com.olucaseduardo.zoomatech_api.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table
-@Getter
+@Table(name = "role")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,6 +35,6 @@ public class Role {
     private Timestamp createdAt;
 
     @Column(nullable = false)
-    @CreationTimestamp
+    @UpdateTimestamp
     private Timestamp updatedAt;
 }
