@@ -1,0 +1,43 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/api/members"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src:
+        - /Users/lucaseduardo/Downloads/rota_do_campo.png
+      description: ""
+      disabled: false
+    - type: text
+      key: name
+      value: Lucas Eduardo
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: Desenvolvedor de Software
+      description: ""
+      disabled: false
+    - type: text
+      key: active
+      value: "true"
+      description: ""
+      disabled: false
+    - type: text
+      key: lattes
+      value: https://lattes.cnpq.br/123456789
+      description: ""
+      disabled: false
+    - type: text
+      key: role
+      value: 2babda6d-7803-4dc9-a9ba-2751a12ee856
+      description: ""
+      disabled: false
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1777939852522

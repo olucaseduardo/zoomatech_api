@@ -1,0 +1,43 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/api/members/{{MEMBER_ID}}"
+method: PUT
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src:
+        - /Users/lucaseduardo/Downloads/banner.png
+      description: Nova foto do membro (opcional)
+      disabled: false
+    - type: text
+      key: name
+      value: Lucas Eduardo Atualizado
+      description: Nome atualizado
+      disabled: false
+    - type: text
+      key: description
+      value: Desenvolvedor de Software Sênior
+      description: Descrição atualizada
+      disabled: false
+    - type: text
+      key: active
+      value: "true"
+      description: Status ativo/inativo
+      disabled: false
+    - type: text
+      key: lattes
+      value: https://lattes.cnpq.br/987654321
+      description: Link do Lattes atualizado
+      disabled: false
+    - type: text
+      key: role
+      value: "0"
+      description: ""
+      disabled: true
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1777939852525

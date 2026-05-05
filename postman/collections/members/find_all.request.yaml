@@ -1,0 +1,9 @@
+$kind: http-request
+name: find_all
+url: "{{BASE_URL}}/api/members"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1777939852523

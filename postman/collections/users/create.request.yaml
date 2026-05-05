@@ -1,0 +1,14 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/auth/register"
+method: POST
+body:
+  type: json
+  content: |-
+    {
+        "email": "lucas@mail.com",
+        "password":"Lucas.teste20",
+        "firstName": "Lucas",
+        "lastName": "Eduardo"
+    }
+order: 1777762808275

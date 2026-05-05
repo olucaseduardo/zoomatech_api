@@ -4,4 +4,6 @@ values:
     value: 'http://localhost:8080'
   - key: TOKEN_ADMIN
     value: ''
+  - key: MEMBER_ID
+    value: ''
 color: 240
