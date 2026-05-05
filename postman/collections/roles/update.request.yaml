@@ -1,0 +1,16 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/api/roles/{{ID_ROLE}}"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: json
+  content: |-
+    {
+        "name": "ROLE_TEST_UPDATED",
+        "description": "Updated description for testing"
+    }
+order: 1778000000003

@@ -1,0 +1,16 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/api/roles"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: json
+  content: |-
+    {
+        "name": "ROLE_TEST",
+        "description": "Role for testing purposes"
+    }
+order: 1778000000000

@@ -1,0 +1,9 @@
+$kind: http-request
+name: find_all
+url: "{{BASE_URL}}/api/roles"
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1778000000001

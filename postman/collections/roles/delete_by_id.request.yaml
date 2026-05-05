@@ -1,0 +1,9 @@
+$kind: http-request
+name: delete_by_id
+url: "{{BASE_URL}}/api/roles/{{ID_ROLE}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1778000000004
