@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.io.Serial;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,21 +24,10 @@ public class ServiceTopic {
     @Column(nullable = false)
     private String topic;
 
-    @Column(nullable = false)
-    private String type;
-
-    @Column(nullable = false)
     private String description;
 
-    @Column(nullable = false)
     private List<String> items;
 
     @ManyToOne
     private Service service;
-
-
-
-
-
-
 }

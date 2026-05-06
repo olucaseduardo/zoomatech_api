@@ -1,0 +1,17 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/services/topic/{{ID_TOPIC}}"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: json
+  content: |-
+    {
+        "topic": "Análise de Requisitos Atualizada",
+        "description": "Levantamento, documentação e validação de necessidades do cliente.",
+        "items": ["Entrevistas", "User Stories", "Diagramas UML", "Protótipos"]
+    }
+order: 1778200000001

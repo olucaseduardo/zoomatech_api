@@ -2,9 +2,12 @@ package com.olucaseduardo.zoomatech_api.controller;
 
 import com.olucaseduardo.zoomatech_api.dto.ApiResponse;
 import com.olucaseduardo.zoomatech_api.dto.service.CreateServiceRequestDTO;
+import com.olucaseduardo.zoomatech_api.dto.service.CreateServiceTopicRequestDTO;
 import com.olucaseduardo.zoomatech_api.dto.service.UpdateServiceRequestDTO;
 import com.olucaseduardo.zoomatech_api.entity.Service;
+import com.olucaseduardo.zoomatech_api.entity.ServiceTopic;
 import com.olucaseduardo.zoomatech_api.services.ServiceService;
+import com.olucaseduardo.zoomatech_api.services.ServiceTopicService;
 import com.olucaseduardo.zoomatech_api.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,18 +24,21 @@ import java.util.UUID;
 public class ServiceController {
 
     private final ServiceService service;
+    private final ServiceTopicService serviceTopicService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ApiResponse<Service>> create(@RequestBody CreateServiceRequestDTO request) {
         var newService = this.service.create(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseUtil.success("Serviço criado com sucesso!", newService, null));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseUtil.success("Serviço criado com sucesso!", newService, null));
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Service>> update(@PathVariable UUID id, @RequestBody UpdateServiceRequestDTO request) {
+    public ResponseEntity<ApiResponse<Service>> update(@PathVariable UUID id,
+            @RequestBody UpdateServiceRequestDTO request) {
         var updateService = this.service.update(id, request);
         return ResponseEntity.ok(ResponseUtil.success("Serviço atualizado com sucesso!", updateService, null));
     }
@@ -56,6 +62,47 @@ public class ServiceController {
     public ResponseEntity<ApiResponse<Void>> deleteById(@PathVariable UUID id) {
         this.service.deleteById(id);
         return ResponseEntity.ok(ResponseUtil.success("Serviço excluído com sucesso!", null, null));
+    }
+
+    @PostMapping("/{id}/topic")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<ServiceTopic>> createServiceTopic(@PathVariable UUID id,
+            @RequestBody CreateServiceTopicRequestDTO request) {
+        ServiceTopic newServiceTopic = this.serviceTopicService.create(id, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ResponseUtil.success("Tópico do serviço criado com sucesso!", newServiceTopic, null));
+    }
+
+    @PutMapping("/topic/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<ServiceTopic>> updateServiceTopic(@PathVariable UUID id,
+            @RequestBody CreateServiceTopicRequestDTO request) {
+        ServiceTopic updateServiceTopic = this.serviceTopicService.update(id, request);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ResponseUtil.success("Tópico do serviço atualizado com sucesso!", updateServiceTopic, null));
+    }
+
+    @GetMapping("/topic/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<ServiceTopic>> findServiceTopicById(@PathVariable UUID id) {
+        var serviceTopic = this.serviceTopicService.findById(id);
+        return ResponseEntity.ok(ResponseUtil.success("Tópico do serviço encontrado com sucesso!", serviceTopic, null));
+    }
+
+    @GetMapping("/topic")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<ServiceTopic>>> findAllServiceTopics() {
+        var serviceTopics = this.serviceTopicService.findAll();
+        return ResponseEntity
+                .ok(ResponseUtil.success("Tópicos do serviço encontrados com sucesso!", serviceTopics, null));
+    }
+
+    @DeleteMapping("/topic/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<Void>> deleteServiceTopicById(@PathVariable UUID id) {
+        this.serviceTopicService.delete(id);
+        return ResponseEntity.ok(ResponseUtil.success("Tópico do serviço excluído com sucesso!", null, null));
     }
 
 }

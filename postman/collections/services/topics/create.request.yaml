@@ -1,0 +1,17 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/services/{{ID_SERVICE}}/topic"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: json
+  content: |-
+    {
+        "topic": "Análise de Requisitos",
+        "description": "Levantamento e documentação de necessidades do cliente.",
+        "items": ["Entrevistas", "User Stories", "Diagramas UML"]
+    }
+order: 1778200000000

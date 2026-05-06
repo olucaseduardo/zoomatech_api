@@ -1,0 +1,9 @@
+$kind: http-request
+name: delete
+url: "{{BASE_URL}}/services/topic/{{ID_TOPIC}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1778200000004
