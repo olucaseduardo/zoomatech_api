@@ -2,4 +2,6 @@ name: production
 values:
   - key: BASE_URL
     value: ''
+  - key: TOKEN_ADMIN
+    value: ''
 color: 120
