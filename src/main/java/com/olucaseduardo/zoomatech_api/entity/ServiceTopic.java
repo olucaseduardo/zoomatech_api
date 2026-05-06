@@ -26,6 +26,7 @@ public class ServiceTopic {
     @Column(nullable = false)
     private String topic;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ElementCollection

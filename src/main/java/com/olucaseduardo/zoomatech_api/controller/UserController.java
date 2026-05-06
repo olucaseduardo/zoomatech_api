@@ -39,6 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity updateCurrentUser(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid UpdateUserRequest request) {
