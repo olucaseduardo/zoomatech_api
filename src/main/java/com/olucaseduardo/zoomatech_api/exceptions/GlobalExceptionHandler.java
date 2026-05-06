@@ -1,8 +1,11 @@
 package com.olucaseduardo.zoomatech_api.exceptions;
 
 import com.olucaseduardo.zoomatech_api.dto.ApiResponse;
+import com.olucaseduardo.zoomatech_api.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,5 +52,15 @@ public class GlobalExceptionHandler {
                 ))
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<Object>> handleBadCredentials() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseUtil.error("E-mail ou senha inválidos",null));
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDisabledAccount() {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseUtil.error("Esta conta está desativada.",null));
     }
 }

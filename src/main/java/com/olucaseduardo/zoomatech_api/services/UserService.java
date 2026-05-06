@@ -56,4 +56,8 @@ public class UserService {
     public Optional<User> findByEmail(@NotBlank String email) {
         return userRepository.findByEmail(email);
     }
+
+    public User findById(UUID uuid) {
+        return this.userRepository.findById(uuid).orElse(null);
+    }
 }
