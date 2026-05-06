@@ -1,0 +1,5 @@
+$kind: http-request
+name: find_all
+url: "{{BASE_URL}}/work-performed"
+method: GET
+order: 1778200000000

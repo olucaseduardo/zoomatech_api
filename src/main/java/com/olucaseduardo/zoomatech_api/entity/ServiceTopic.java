@@ -1,5 +1,6 @@
 package com.olucaseduardo.zoomatech_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class ServiceTopic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "service_topic_id")
     private UUID id;
 
     @Column(nullable = false)
@@ -26,8 +28,11 @@ public class ServiceTopic {
 
     private String description;
 
+    @ElementCollection
     private List<String> items;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id", nullable = false)
+    @JsonBackReference
     private Service service;
 }

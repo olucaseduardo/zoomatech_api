@@ -1,0 +1,37 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/work-performed/{{WORK_PERFORMED_ID}}"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src: []
+      description: "Nova foto do trabalho realizado (opcional)"
+      disabled: false
+    - type: text
+      key: title
+      value: "Instalação de Painéis Solares - Atualizado"
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: "Instalação completa de sistema fotovoltaico residencial com manutenção inclusa."
+      description: ""
+      disabled: false
+    - type: text
+      key: performedAt
+      value: "2024-05-06"
+      description: ""
+      disabled: false
+    - type: text
+      key: serviceIds
+      value: "2babda6d-7803-4dc9-a9ba-2751a12ee856"
+      description: ""
+      disabled: false
+order: 1778400000000

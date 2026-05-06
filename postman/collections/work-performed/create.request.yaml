@@ -1,0 +1,48 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/work-performed"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src:
+        - /Users/lucaseduardo/Downloads/rota_do_campo.png
+      description: Foto do trabalho realizado
+      disabled: false
+    - type: text
+      key: title
+      value: Instalação de Painéis Solares
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: Instalação completa de sistema fotovoltaico residencial.
+      description: ""
+      disabled: false
+    - type: text
+      key: performedAt
+      value: 2024-05-05
+      description: ""
+      disabled: false
+    - type: text
+      key: serviceIds
+      value: 2babda6d-7803-4dc9-a9ba-2751a12ee856
+      description: ID do serviço (pode ser repetido para múltiplos serviços)
+      disabled: false
+    - type: text
+      key: serviceIds
+      value: 430bb5fd-8709-4bf4-9399-62a451f4c801
+      description: ID do serviço (pode ser repetido para múltiplos serviços)
+      disabled: false
+    - type: text
+      key: serviceIds
+      value: 2babda6d-7803-4dc9-a9ba-2751a12ee856
+      description: ID do serviço (pode ser repetido para múltiplos serviços)
+      disabled: true
+order: 1778100000000

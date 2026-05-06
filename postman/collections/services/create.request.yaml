@@ -10,7 +10,7 @@ body:
   type: json
   content: |-
     {
-        "name": "Consultoria em TI",
+        "name": "Consultoria em TI 2",
         "description": "Serviços de consultoria especializada em tecnologia da informação.",
         "icon": "bi bi-laptop"
     }

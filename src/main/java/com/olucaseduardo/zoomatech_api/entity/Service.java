@@ -1,5 +1,6 @@
 package com.olucaseduardo.zoomatech_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +33,8 @@ public class Service {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @OneToMany(mappedBy = "service", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<ServiceTopic> serviceTopic;
 
     @ManyToMany(mappedBy = "services")
