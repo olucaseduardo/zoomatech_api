@@ -33,7 +33,12 @@ body:
       disabled: false
     - type: text
       key: role
-      value: 64b07aa6-9000-45ce-b791-17b86b97988b
+      value: ac1cc6b1-c24a-43ea-8ad0-247a9a5c531b
+      description: ""
+      disabled: false
+    - type: text
+      key: category
+      value: ""
       description: ""
       disabled: false
 auth:

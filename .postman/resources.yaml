@@ -17,6 +17,7 @@ cloudResources:
     ../postman/collections/roles: 19174799-9d7808d1-c962-4802-99f4-009bef707d6c
     ../postman/collections/members: 19174799-7c4a953b-91ad-41de-b512-5ec0e3ece424
     ../postman/collections/services: 19174799-68f721e5-1a08-4980-97b6-8875e6a48e23
+    ../postman/collections/work-performed: 19174799-493c02d4-d17f-47c3-a3c1-287b66690d15
 
 # All resources in the `postman/` folder are automatically registered in Local View.
 # Point to additional files outside the `postman/` folder to register them individually. Example:

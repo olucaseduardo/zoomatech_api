@@ -11,6 +11,7 @@ public record CreateMemberRequestDTO(
         @NotBlank(message = "O nome é obrigatório")
         String name,
 
+        @NotNull(message = "A foto é obrigatória")
         MultipartFile photo,
 
         @NotNull(message = "O cargo é obrigatório")

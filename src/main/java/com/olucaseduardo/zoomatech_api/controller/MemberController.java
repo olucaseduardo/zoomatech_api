@@ -6,6 +6,7 @@ import com.olucaseduardo.zoomatech_api.entity.Member;
 import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.services.MemberService;
 import com.olucaseduardo.zoomatech_api.util.ResponseUtil;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ public class MemberController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<Member>> save(@ModelAttribute CreateMemberRequestDTO request) throws IOException {
+    public ResponseEntity<ApiResponse<Member>> save(@Valid @ModelAttribute CreateMemberRequestDTO request) throws IOException {
         Member createdMember = memberService.create(request);
         ApiResponse<Member> apiResponse = ResponseUtil.success("Membro criado com sucesso!", createdMember, null);
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);

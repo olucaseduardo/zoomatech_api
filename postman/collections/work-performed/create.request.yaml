@@ -1,6 +1,6 @@
 $kind: http-request
 name: create
-url: "{{BASE_URL}}/work-performed"
+url: "{{BASE_URL}}/work-performed "
 method: POST
 auth:
   type: bearer
