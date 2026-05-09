@@ -30,6 +30,7 @@ public class MemberService {
                 .name(request.name())
                 .photo(request.photo().getBytes())
                 .description(request.description())
+                .category(request.category())
                 .active(request.active())
                 .lattes(request.lattes())
                 .role(role)
@@ -53,18 +54,7 @@ public class MemberService {
         Member team = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membro do time não encontrado com id " + id));
 
-        Member updatedTeam = Member.builder()
-                .id(team.getId())
-                .name(team.getName())
-                .photo(team.getPhoto())
-                .description(team.getDescription())
-                .active(false)
-                .lattes(team.getLattes())
-                .role(team.getRole())
-                .createdAt(team.getCreatedAt())
-                .updatedAt(new Timestamp(System.currentTimeMillis()))
-                .build();
-        memberRepository.save(updatedTeam);
+        this.memberRepository.delete(team);
     }
 
     public Member update(UUID id, CreateMemberRequestDTO request) throws IOException {
@@ -86,6 +76,7 @@ public class MemberService {
         updatedTeamBuilder.description(request.description() != null && !request.description().isBlank() ? request.description() : existingTeam.getDescription());
         updatedTeamBuilder.active(request.active() != null ? request.active() : existingTeam.getActive());
         updatedTeamBuilder.lattes(request.lattes() != null && !request.lattes().isBlank() ? request.lattes() : existingTeam.getLattes());
+        updatedTeamBuilder.category(request.category() != null ? request.category() : existingTeam.getCategory());
 
         if (request.photo() != null && !request.photo().isEmpty()) {
             updatedTeamBuilder.photo(request.photo().getBytes());

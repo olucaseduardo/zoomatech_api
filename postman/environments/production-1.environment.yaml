@@ -4,4 +4,6 @@ values:
     value: ''
   - key: TOKEN_ADMIN
     value: ''
+  - key: ID_SERVICE
+    value: ''
 color: 120

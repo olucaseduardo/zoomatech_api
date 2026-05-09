@@ -1,5 +1,6 @@
 package com.olucaseduardo.zoomatech_api.dto.team;
 
+import com.olucaseduardo.zoomatech_api.entity.CategoryMember;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -24,6 +25,9 @@ public record CreateMemberRequestDTO(
         Boolean active,
 
         @NotBlank(message = "O link do Lattes é obrigatório")
-        String lattes
+        String lattes,
+
+        @NotBlank(message = "A categoria do membro é obrigatório")
+        CategoryMember category
 ) {
 }

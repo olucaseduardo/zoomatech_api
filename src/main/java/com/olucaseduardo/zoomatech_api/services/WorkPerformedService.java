@@ -37,8 +37,9 @@ public class WorkPerformedService {
 
         Set<com.olucaseduardo.zoomatech_api.entity.Service> services = new HashSet<>(this.serviceRepository.findAllById(request.serviceIds().stream().toList()));
 
+        String photoPath = "teste";
         WorkPerformed workPerformed = WorkPerformed.builder()
-                .photo(request.photo().getBytes())
+                .photo(photoPath)
                 .description(request.description())
                 .title(request.title())
                 .performedAt(request.performedAt())
@@ -60,8 +61,9 @@ public class WorkPerformedService {
                 .performedAt(request.performedAt() != null && !request.performedAt().isBlank() ? request.performedAt() : workPerformed.getPerformedAt())
                 .services(!request.serviceIds().isEmpty() ? services : workPerformed.getServices());
 
+        String photoPath = "teste2";
         if (request.photo() != null && !request.photo().isEmpty()) {
-            updatePerformed.photo(request.photo().getBytes());
+            updatePerformed.photo(photoPath);
         } else {
             updatePerformed.photo(workPerformed.getPhoto());
         }

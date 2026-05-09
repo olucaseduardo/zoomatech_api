@@ -35,6 +35,9 @@ public class Member {
     private String description;
 
     @Column(nullable = false)
+    private CategoryMember category;
+
+    @Column(nullable = false)
     private Boolean active;
 
     @Column(nullable = false)

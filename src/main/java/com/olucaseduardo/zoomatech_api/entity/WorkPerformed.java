@@ -1,5 +1,6 @@
 package com.olucaseduardo.zoomatech_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,8 +25,7 @@ public class WorkPerformed {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Lob
-    private byte[] photo;
+    private String photo;
 
     @Column(nullable = false)
     private String title;
@@ -42,6 +42,7 @@ public class WorkPerformed {
             joinColumns = @JoinColumn(name = "work_performed_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
+    @JsonBackReference
     private Set<Service> services;
 
     @Column(nullable = false)

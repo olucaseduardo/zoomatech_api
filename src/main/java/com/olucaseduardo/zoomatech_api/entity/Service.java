@@ -38,6 +38,7 @@ public class Service {
     private Set<ServiceTopic> serviceTopic;
 
     @ManyToMany(mappedBy = "services")
+    @JsonManagedReference
     private Set<WorkPerformed> workPerformeds;
 
     @Column(nullable = false)

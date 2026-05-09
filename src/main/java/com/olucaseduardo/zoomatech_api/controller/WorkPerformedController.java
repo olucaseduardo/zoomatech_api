@@ -65,11 +65,11 @@ public class WorkPerformedController {
     public ResponseEntity<byte[]> getImage(@PathVariable UUID id) {
         WorkPerformed work = this.workPerformedService.findById(id);
 
-        if (work != null) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .body(work.getPhoto());
-        }
+//        if (work != null) {
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.IMAGE_JPEG)
+//                    .body(work.getPhoto());
+//        }
         return ResponseEntity.notFound().build();
 
     }

@@ -6,9 +6,9 @@ body:
   type: json
   content: |-
     {
-        "key": "WHATSAPP_CONTACT",
-        "value": "(99) 9 9218-4187",
-        "description": "Número de whatsapp na tela inicial da empresa junior"
+        "key": "EMAIL_CONTACT",
+        "value": "contact@mail.com",
+        "description": "Email de contato no rodapé da tela inicial da empresa junior"
     }
 auth:
   type: bearer
