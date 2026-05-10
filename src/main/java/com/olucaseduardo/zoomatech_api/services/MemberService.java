@@ -2,15 +2,15 @@ package com.olucaseduardo.zoomatech_api.services;
 
 import com.olucaseduardo.zoomatech_api.dto.team.CreateMemberRequestDTO;
 import com.olucaseduardo.zoomatech_api.entity.Member;
-import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.entity.Role;
+import com.olucaseduardo.zoomatech_api.exceptions.BadRequestException;
+import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.MemberRepository;
 import com.olucaseduardo.zoomatech_api.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -21,14 +21,15 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
+    private final StorageService storageService;
 
     public Member create(CreateMemberRequestDTO request) throws IOException {
         Role role = roleRepository.findById(request.role())
                 .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com id " + request.role()));
-
+        var photoPath = storageService.uploadFile(request.photo()).orElseThrow(() -> new BadRequestException("Erro ao armazenar a foto no sistema!"));
         Member member = Member.builder()
                 .name(request.name())
-                .photo(request.photo().getBytes())
+                .photo(photoPath)
                 .description(request.description())
                 .category(request.category())
                 .active(request.active())
@@ -79,7 +80,8 @@ public class MemberService {
         updatedTeamBuilder.category(request.category() != null ? request.category() : existingTeam.getCategory());
 
         if (request.photo() != null && !request.photo().isEmpty()) {
-            updatedTeamBuilder.photo(request.photo().getBytes());
+            var photoPath = storageService.uploadFile(request.photo(), existingTeam.getPhoto()).orElseThrow(() -> new BadRequestException("Erro ao armazenar a foto no sistema!"));
+            updatedTeamBuilder.photo(photoPath);
         } else {
             updatedTeamBuilder.photo(existingTeam.getPhoto());
         }

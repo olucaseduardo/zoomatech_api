@@ -1,6 +1,5 @@
 package com.olucaseduardo.zoomatech_api.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,9 +26,7 @@ public class Member {
     private String name;
 
     @Column(nullable = false)
-    @Lob
-    @JsonIgnore
-    private byte[] photo;
+    private String photo;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String description;

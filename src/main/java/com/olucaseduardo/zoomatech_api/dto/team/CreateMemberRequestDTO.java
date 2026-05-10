@@ -27,7 +27,6 @@ public record CreateMemberRequestDTO(
         @NotBlank(message = "O link do Lattes é obrigatório")
         String lattes,
 
-        @NotBlank(message = "A categoria do membro é obrigatório")
-        CategoryMember category
+        @NotNull(message = "A categoria do membro é obrigatória") CategoryMember category
 ) {
 }

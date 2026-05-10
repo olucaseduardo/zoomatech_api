@@ -2,6 +2,8 @@ package com.olucaseduardo.zoomatech_api.controller;
 
 import com.olucaseduardo.zoomatech_api.dto.ApiResponse;
 import com.olucaseduardo.zoomatech_api.dto.work_performed.CreateWorkPerformedRequestDTO;
+import com.olucaseduardo.zoomatech_api.dto.work_performed.UpdateWorkPerformedRequestDTO;
+import com.olucaseduardo.zoomatech_api.dto.work_performed.WorkPerformedResponseDTO;
 import com.olucaseduardo.zoomatech_api.entity.WorkPerformed;
 import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.services.WorkPerformedService;
@@ -9,7 +11,6 @@ import com.olucaseduardo.zoomatech_api.util.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,8 @@ public class WorkPerformedController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<WorkPerformed>>> findAll() {
-        List<WorkPerformed> works = workPerformedService.findAll();
+    public ResponseEntity<ApiResponse<List<WorkPerformedResponseDTO>>> findAll() {
+        List<WorkPerformedResponseDTO> works = workPerformedService.findAll();
         return ResponseEntity.ok(ResponseUtil.success("Trabalhos realizados listados com sucesso!", works, null));
     }
 
@@ -49,7 +50,7 @@ public class WorkPerformedController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse<WorkPerformed>> update(@PathVariable UUID id, @ModelAttribute CreateWorkPerformedRequestDTO request) throws IOException {
+    public ResponseEntity<ApiResponse<WorkPerformed>> update(@PathVariable UUID id, @ModelAttribute UpdateWorkPerformedRequestDTO request) throws IOException {
         WorkPerformed updatedWork = workPerformedService.update(id, request);
         return ResponseEntity.ok(ResponseUtil.success("Trabalho realizado atualizado com sucesso!", updatedWork, null));
     }

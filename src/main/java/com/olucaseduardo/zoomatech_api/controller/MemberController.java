@@ -9,7 +9,6 @@ import com.olucaseduardo.zoomatech_api.util.ResponseUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -70,9 +69,7 @@ public class MemberController {
     public ResponseEntity<byte[]> getImage(@PathVariable UUID id) {
         Member member = this.memberService.findById(id).orElseThrow(() -> new ResourceNotFoundException("Membro não encontrado com o ID " + id));
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)
-                .body(member.getPhoto());
+        return ResponseEntity.ok().build();
 
     }
 }
