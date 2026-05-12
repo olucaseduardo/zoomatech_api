@@ -40,7 +40,7 @@ public class Service {
 
     @ManyToMany(mappedBy = "services")
     @JsonManagedReference
-    @OrderBy("createdAt DESC")
+    @OrderBy("performedAt DESC")
     private Set<WorkPerformed> workPerformeds;
 
     @Column(nullable = false)
