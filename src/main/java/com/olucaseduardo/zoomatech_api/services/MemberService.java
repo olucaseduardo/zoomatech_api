@@ -40,7 +40,7 @@ public class MemberService {
     }
 
     public List<Member> findAll() {
-        return memberRepository.findAll();
+        return memberRepository.findAllByOrderByRoleOrderAsc();
     }
 
     public Optional<Member> findById(UUID id) {

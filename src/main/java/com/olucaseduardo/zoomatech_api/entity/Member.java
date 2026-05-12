@@ -32,6 +32,7 @@ public class Member {
     private String description;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private CategoryMember category;
 
     @Column(nullable = false)

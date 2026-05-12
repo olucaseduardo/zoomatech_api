@@ -20,7 +20,7 @@ public class RoleService {
     private final RoleRepository roleRepository;
 
     public List<Role> findAll() {
-        return roleRepository.findAll();
+        return roleRepository.findAllByOrderByOrderAsc();
     }
 
     public Optional<Role> findById(UUID id) {
@@ -32,6 +32,7 @@ public class RoleService {
         Role role = Role.builder()
                 .name(request.name())
                 .description(request.description())
+                .order(request.order())
                 .build();
         return roleRepository.save(role);
     }
@@ -40,6 +41,20 @@ public class RoleService {
     public Role update(UUID id, UpdateRoleRequestDTO request) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com id " + id));
+
+        if (request.order() != null) {
+            Integer oldOrder = role.getOrder();
+            Integer newOrder = request.order();
+
+            if (!oldOrder.equals(newOrder)) {
+                if (newOrder > oldOrder) {
+                    roleRepository.decrementOrderBetween(oldOrder + 1, newOrder);
+                } else {
+                    roleRepository.incrementOrderBetween(newOrder, oldOrder - 1);
+                }
+                role.setOrder(newOrder);
+            }
+        }
 
         if (request.name() != null) {
             role.setName(request.name());

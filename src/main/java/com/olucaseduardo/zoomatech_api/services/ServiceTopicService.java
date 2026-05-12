@@ -20,7 +20,7 @@ public class ServiceTopicService {
     private final ServiceRepository serviceRepository;
 
     public List<ServiceTopic> findAll() {
-        return serviceTopicRepository.findAll();
+        return serviceTopicRepository.findAllByOrderByCreatedAtAsc();
     }
 
     public ServiceTopic findById(UUID id) {

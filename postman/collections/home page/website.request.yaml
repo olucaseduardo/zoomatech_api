@@ -1,0 +1,5 @@
+$kind: http-request
+name: website
+url: "{{BASE_URL}}/public/website"
+method: GET
+order: 1778355747211

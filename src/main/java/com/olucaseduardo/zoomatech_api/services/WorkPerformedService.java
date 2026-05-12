@@ -30,7 +30,7 @@ public class WorkPerformedService {
     }
 
     public List<WorkPerformedResponseDTO> findAll() {
-        return this.workPerformedRepository.findAll().stream().map(WorkPerformedResponseDTO::new).toList();
+        return this.workPerformedRepository.findAllByOrderByCreatedAtDesc().stream().map(WorkPerformedResponseDTO::new).toList();
     }
 
     public void delete(UUID id) {

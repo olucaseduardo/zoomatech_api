@@ -30,6 +30,9 @@ public class Role {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false, name = "\"order\"")
+    private Integer order;
+
     @Column(nullable = false)
     @CreationTimestamp
     private Timestamp createdAt;
