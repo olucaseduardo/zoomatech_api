@@ -35,10 +35,12 @@ public class Service {
 
     @OneToMany(mappedBy = "service", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonManagedReference
+    @OrderBy("createdAt ASC")
     private Set<ServiceTopic> serviceTopic;
 
     @ManyToMany(mappedBy = "services")
     @JsonManagedReference
+    @OrderBy("createdAt DESC")
     private Set<WorkPerformed> workPerformeds;
 
     @Column(nullable = false)

@@ -35,7 +35,7 @@ public class ServiceService {
     }
 
     public List<com.olucaseduardo.zoomatech_api.entity.Service> findAll() {
-        return this.serviceRepository.findAll();
+        return this.serviceRepository.findAllByOrderByCreatedAtAsc();
     }
 
 
