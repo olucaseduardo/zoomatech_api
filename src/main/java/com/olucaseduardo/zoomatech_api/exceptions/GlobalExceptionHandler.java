@@ -2,6 +2,7 @@ package com.olucaseduardo.zoomatech_api.exceptions;
 
 import com.olucaseduardo.zoomatech_api.dto.ApiResponse;
 import com.olucaseduardo.zoomatech_api.util.ResponseUtil;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -52,6 +53,20 @@ public class GlobalExceptionHandler {
                 ))
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message = "Não é possível realizar esta operação pois o registro está sendo utilizado por outros dados do sistema.";
+
+        String cause = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
+        if (cause.contains("fk_member_role") || cause.contains("member")) {
+            message = "Este cargo não pode ser excluído pois existem membros vinculados a ele.";
+        } else if (cause.contains("service_performed") || cause.contains("work_performed")) {
+            message = "Este serviço não pode ser excluído pois existem trabalhos realizados vinculados a ele.";
+        }
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseUtil.error(message, null));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
