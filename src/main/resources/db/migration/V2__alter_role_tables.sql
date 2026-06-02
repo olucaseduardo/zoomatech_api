@@ -1,2 +1,2 @@
-ALTER table role
+ALTER TABLE "role"
     ADD COLUMN "order" INT NOT NULL;
