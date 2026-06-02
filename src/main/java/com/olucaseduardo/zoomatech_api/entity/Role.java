@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
-@Table(name = "role")
+@Table(name = "roles")
 @Data
 @Builder
 @NoArgsConstructor
