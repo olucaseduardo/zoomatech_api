@@ -1,6 +1,6 @@
 # Zoomatech API
 
-API desenvolvida com Spring Boot para gerenciamento de serviços, membros e configurações de sistema.
+API desenvolvida com Spring Boot para gerenciamento de serviços, membros, eventos e configurações de sistema da ZoomaTech Jr.
 
 ## Tecnologias Utilizadas
 
@@ -10,6 +10,7 @@ API desenvolvida com Spring Boot para gerenciamento de serviços, membros e conf
 - **Spring Security (JWT)**
 - **PostgreSQL**
 - **Flyway** (Migrações de banco de dados)
+- **AWS S3 / Cloudflare R2** (Upload de arquivos)
 - **Docker & Docker Compose**
 - **Lombok**
 
@@ -26,13 +27,11 @@ API desenvolvida com Spring Boot para gerenciamento de serviços, membros e conf
    ```bash
    cp .env-example .env
    ```
-3. Preencha as variáveis de ambiente no arquivo `.env` com as suas credenciais de banco de dados e segredos JWT.
+3. Preencha as variáveis de ambiente no arquivo `.env` com as suas credenciais.
 
 ## Como Executar
 
 ### Via Docker Compose
-
-O projeto está configurado para rodar em containers. Para iniciar a aplicação e o banco de dados:
 
 ```bash
 docker-compose up --build
@@ -50,16 +49,21 @@ Certifique-se de que o banco de dados PostgreSQL esteja rodando e as variáveis 
 
 ## Documentação da API
 
-As requisições da API estão documentadas através de coleções do Postman localizadas na pasta `/postman/collections`.
+As requisições estão documentadas através de coleções do Postman localizadas na pasta `/postman/collections`.
 
-### Principais Recursos
+### Recursos
 
-- **Auth**: Registro e login de usuários.
-- **Users**: Gerenciamento de usuários.
-- **Members**: CRUD de membros da equipe (com suporte a upload de fotos).
-- **Roles**: CRUD de cargos/funções.
-- **Services**: Gerenciamento de serviços oferecidos.
-- **Configurations**: Configurações dinâmicas do sistema.
+| Recurso | Descrição |
+|---|---|
+| **Auth** | Registro e login de usuários |
+| **Users** | Gerenciamento de usuários |
+| **Members** | CRUD de membros da equipe com upload de foto |
+| **Roles** | CRUD de cargos e funções |
+| **Services** | Gerenciamento de serviços oferecidos |
+| **Work Performed** | CRUD de trabalhos realizados com upload de foto |
+| **Events** | CRUD de eventos com categorias (Realizados / Participação) |
+| **Configurations** | Configurações dinâmicas do sistema |
+| **Public** | Endpoint agregado para o website |
 
 ## Segurança
 
