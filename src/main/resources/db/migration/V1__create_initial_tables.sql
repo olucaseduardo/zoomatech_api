@@ -20,12 +20,13 @@ CREATE TABLE refresh_tokens
     CONSTRAINT fk_refresh_token_user FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
--- Create role table (Member Roles)
-CREATE TABLE role
+-- Create roles table (Member Roles)
+CREATE TABLE roles
 (
     id          UUID PRIMARY KEY,
     name        VARCHAR(255) NOT NULL,
     description TEXT         NOT NULL,
+    "order"     INT          NOT NULL,
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -43,7 +44,7 @@ CREATE TABLE member
     role_id     UUID         NOT NULL,
     created_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_member_role FOREIGN KEY (role_id) REFERENCES role (id)
+    CONSTRAINT fk_member_role FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
 -- Create service table

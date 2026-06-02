@@ -1,2 +1,2 @@
-ALTER TABLE "role"
-    ADD COLUMN "order" INT NOT NULL;
+-- order column already included in V1 (roles table)
+SELECT 1;
