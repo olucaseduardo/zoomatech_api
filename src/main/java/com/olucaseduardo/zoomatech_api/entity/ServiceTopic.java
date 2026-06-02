@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table(name = "service_topic")
 @Getter
 @Builder
 @NoArgsConstructor
