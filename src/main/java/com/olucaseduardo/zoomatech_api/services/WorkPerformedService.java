@@ -68,7 +68,7 @@ public class WorkPerformedService {
                 .services(!request.serviceIds().isEmpty() ? services : workPerformed.getServices());
 
         if (request.photo() != null && !request.photo().isEmpty()) {
-            var photoPath = storageService.uploadFile(request.photo(), workPerformed.getPhoto()).orElseThrow(() -> new BadRequestException("Erro ao armazenar a foto no sistema!"));
+            var photoPath = storageService.replaceFile(request.photo(), workPerformed.getPhoto()).orElseThrow(() -> new BadRequestException("Erro ao armazenar a foto no sistema!"));
             updatePerformed.photo(photoPath);
         } else {
             updatePerformed.photo(workPerformed.getPhoto());

@@ -1,0 +1,42 @@
+$kind: http-request
+name: update
+url: "{{BASE_URL}}/events/{{EVENTO_ID}}"
+method: PUT
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src: []
+      description: "Nova foto do evento (opcional)"
+      disabled: false
+    - type: text
+      key: title
+      value: "Feira de Energia Solar 2025 - Atualizado"
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: "Evento anual de apresentação de soluções em energia solar fotovoltaica com novidades."
+      description: ""
+      disabled: false
+    - type: text
+      key: startDate
+      value: "2025-08-10"
+      description: "Data de início (YYYY-MM-DD)"
+      disabled: false
+    - type: text
+      key: endDate
+      value: "2025-08-13"
+      description: "Data de término (YYYY-MM-DD)"
+      disabled: false
+    - type: text
+      key: categoria
+      value: "REALIZADOS"
+      description: "Categoria do evento: PARTICIPACAO ou REALIZADOS"
+      disabled: false
+order: 1780400000000

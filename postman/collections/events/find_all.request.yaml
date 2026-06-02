@@ -1,0 +1,5 @@
+$kind: http-request
+name: find_all
+url: "{{BASE_URL}}/events"
+method: GET
+order: 1780200000000

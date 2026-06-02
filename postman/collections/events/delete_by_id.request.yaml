@@ -1,0 +1,9 @@
+$kind: http-request
+name: delete_by_id
+url: "{{BASE_URL}}/events/{{EVENTO_ID}}"
+method: DELETE
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+order: 1780500000000

@@ -80,7 +80,7 @@ public class MemberService {
         updatedTeamBuilder.category(request.category() != null ? request.category() : existingTeam.getCategory());
 
         if (request.photo() != null && !request.photo().isEmpty()) {
-            var photoPath = storageService.uploadFile(request.photo(), existingTeam.getPhoto()).orElseThrow(() -> new BadRequestException("Erro ao armazenar a foto no sistema!"));
+            var photoPath = storageService.replaceFile(request.photo(), existingTeam.getPhoto()).orElseThrow(() -> new BadRequestException("Erro ao armazenar a foto no sistema!"));
             updatedTeamBuilder.photo(photoPath);
         } else {
             updatedTeamBuilder.photo(existingTeam.getPhoto());

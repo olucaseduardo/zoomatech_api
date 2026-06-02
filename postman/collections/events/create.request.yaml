@@ -1,0 +1,43 @@
+$kind: http-request
+name: create
+url: "{{BASE_URL}}/events"
+method: POST
+auth:
+  type: bearer
+  credentials:
+    token: "{{TOKEN_ADMIN}}"
+body:
+  type: formdata
+  content:
+    - type: file
+      key: photo
+      src:
+        - /Users/lucaseduardo/Downloads/rota_do_campo.png
+      description: Foto do evento
+      disabled: false
+    - type: text
+      key: title
+      value: "Feira de Energia Solar 2025"
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: "Evento anual de apresentação de soluções em energia solar fotovoltaica."
+      description: ""
+      disabled: false
+    - type: text
+      key: startDate
+      value: "2025-08-10"
+      description: "Data de início (YYYY-MM-DD)"
+      disabled: false
+    - type: text
+      key: endDate
+      value: "2025-08-12"
+      description: "Data de término (YYYY-MM-DD). Igual ao startDate para evento de um dia."
+      disabled: false
+    - type: text
+      key: categoria
+      value: "PARTICIPACAO"
+      description: "Categoria do evento: PARTICIPACAO ou REALIZADOS"
+      disabled: false
+order: 1780100000000

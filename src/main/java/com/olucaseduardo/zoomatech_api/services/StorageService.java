@@ -21,7 +21,8 @@ public class StorageService {
     @Value("${AWS_BUCKET_NAME}")
     private String bucketName;
 
-    public Optional<String> uploadFile(MultipartFile file, String filePath) {
+    public Optional<String> uploadFile(MultipartFile file) {
+        String newPath = UUID.randomUUID().toString();
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
@@ -31,16 +32,19 @@ public class StorageService {
             }
             metadata.setContentType(contentType);
 
-            s3.putObject(new PutObjectRequest(this.bucketName, filePath, file.getInputStream(), metadata));
+            s3.putObject(new PutObjectRequest(this.bucketName, newPath, file.getInputStream(), metadata));
 
-            return Optional.of(filePath);
+            return Optional.of(newPath);
         } catch (IOException e) {
             return Optional.empty();
         }
     }
 
-    public Optional<String> uploadFile(MultipartFile file) {
-        String defaultPath = UUID.randomUUID().toString();
-        return this.uploadFile(file, defaultPath);
+    public Optional<String> replaceFile(MultipartFile newFile, String oldFilePath) {
+        try {
+            s3.deleteObject(this.bucketName, oldFilePath);
+        } catch (Exception ignored) {
+        }
+        return this.uploadFile(newFile);
     }
 }
