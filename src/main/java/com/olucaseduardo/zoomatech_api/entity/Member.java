@@ -47,8 +47,10 @@ public class Member {
     private Role role;
 
     @CreationTimestamp
+    @Column(nullable = false)
     private Timestamp createdAt;
 
     @UpdateTimestamp
+    @Column(nullable = false)
     private Timestamp updatedAt;
 }

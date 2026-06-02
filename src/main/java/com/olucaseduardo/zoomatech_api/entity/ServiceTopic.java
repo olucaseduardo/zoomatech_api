@@ -41,8 +41,10 @@ public class ServiceTopic {
     private Service service;
 
     @CreationTimestamp
+    @Column(nullable = false)
     private LocalDateTime createdAt;
-    
+
     @UpdateTimestamp
+    @Column(nullable = false)
     private LocalDateTime updatedAt;
 }
