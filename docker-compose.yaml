@@ -24,8 +24,8 @@ services:
       - AWS_ENDPOINT=${AWS_ENDPOINT}
       - JAVA_TOOL_OPTIONS=-Djava.net.preferIPv4Stack=true
     networks:
-      - postgres_pg_15_network
+      - projetos_net
 
 networks:
-  postgres_pg_15_network:
+  projetos_net:
     external: true
