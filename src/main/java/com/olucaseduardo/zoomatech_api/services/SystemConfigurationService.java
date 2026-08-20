@@ -8,6 +8,7 @@ import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.SystemConfigurationRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class SystemConfigurationService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public SystemConfiguration create(CreateSystemConfigurationDTO newConfiguration) {
 
         this.systemConfigurationRepository.findSystemConfigurationByKey(newConfiguration.key()).ifPresent(config -> {
@@ -38,6 +40,7 @@ public class SystemConfigurationService {
         return this.systemConfigurationRepository.save(systemConfiguration);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public SystemConfiguration update(UUID id, UpdateSystemConfigurationDTO fields) {
         return systemConfigurationRepository.findById(id)
                 .map(systemConfiguration -> {

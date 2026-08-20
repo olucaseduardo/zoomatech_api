@@ -6,6 +6,7 @@ import com.olucaseduardo.zoomatech_api.dto.work_performed.WorkPerformedResponseD
 import com.olucaseduardo.zoomatech_api.entity.Member;
 import com.olucaseduardo.zoomatech_api.entity.SystemConfiguration;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class HomeService {
     private final SystemConfigurationService systemConfigurationService;
     private final EventoService eventoService;
 
+    @Cacheable(cacheNames = "homepage", key = "'default'")
     public HomePageResponseDTO findHomePageData() {
         List<Member> members = this.memberService.findAll();
         List<WorkPerformedResponseDTO> workPerformeds = this.workPerformedService.findAll();

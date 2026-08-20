@@ -18,9 +18,8 @@ public class HomeController {
     private final HomeService homeService;
 
     @GetMapping
-    public ResponseEntity<ApiResponse<HomePageResponseDTO>> getHomePageData()
-    {
+    public ResponseEntity<ApiResponse<HomePageResponseDTO>> getHomePageData() {
         HomePageResponseDTO responseDTO = homeService.findHomePageData();
-        return ResponseEntity.ok(ResponseUtil.success("Dados recuperados com sucesso!",responseDTO,null));
+        return ResponseEntity.ok(ResponseUtil.success("Dados recuperados com sucesso!", responseDTO, null));
     }
 }

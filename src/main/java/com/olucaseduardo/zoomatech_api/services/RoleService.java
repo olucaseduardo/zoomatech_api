@@ -7,6 +7,7 @@ import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.RoleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class RoleService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Role create(CreateRoleRequestDTO request) {
         Role role = Role.builder()
                 .name(request.name())
@@ -38,6 +40,7 @@ public class RoleService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Role update(UUID id, UpdateRoleRequestDTO request) {
         Role role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com id " + id));
@@ -67,6 +70,7 @@ public class RoleService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void deleteById(UUID id) {
         if (!roleRepository.existsById(id)) {
             throw new ResourceNotFoundException("Função não encontrada com id " + id);

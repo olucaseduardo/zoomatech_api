@@ -6,6 +6,7 @@ import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.ServiceRepository;
 import com.olucaseduardo.zoomatech_api.repository.ServiceTopicRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ServiceTopicService {
         return serviceTopic.orElse(null);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public ServiceTopic create(UUID serviceId, CreateServiceTopicRequestDTO request) {
         com.olucaseduardo.zoomatech_api.entity.Service service = this.serviceRepository.findById(serviceId).orElseThrow(() -> new ResourceNotFoundException("Serviço com o ID " + serviceId + " não encontrado.")
         );
@@ -42,6 +44,7 @@ public class ServiceTopicService {
         return this.serviceTopicRepository.save(serviceTopic);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public ServiceTopic update(UUID id, CreateServiceTopicRequestDTO request) {
         ServiceTopic serviceTopic = this.serviceTopicRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tópico de serviço com ID" + id + " não encontrado."));
 
@@ -56,6 +59,7 @@ public class ServiceTopicService {
         return this.serviceTopicRepository.save(updateServiceTopic);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void delete(UUID id) {
         this.serviceTopicRepository.deleteById(id);
     }

@@ -9,6 +9,7 @@ import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.ServiceRepository;
 import com.olucaseduardo.zoomatech_api.repository.WorkPerformedRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,10 +34,12 @@ public class WorkPerformedService {
         return this.workPerformedRepository.findAllByOrderByCreatedAtDesc().stream().map(WorkPerformedResponseDTO::new).toList();
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void delete(UUID id) {
         this.workPerformedRepository.deleteById(id);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public WorkPerformed create(CreateWorkPerformedRequestDTO request) throws IOException {
 
         Set<com.olucaseduardo.zoomatech_api.entity.Service> services = new HashSet<>(this.serviceRepository.findAllById(request.serviceIds().stream().toList()));
@@ -54,6 +57,7 @@ public class WorkPerformedService {
         return this.workPerformedRepository.save(workPerformed);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public WorkPerformed update(UUID id, UpdateWorkPerformedRequestDTO request) throws IOException {
         WorkPerformed workPerformed = this.workPerformedRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("O trabalho realizado não foi encontrado com o ID " + id));
 

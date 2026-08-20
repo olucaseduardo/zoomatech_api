@@ -8,6 +8,7 @@ import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.MemberRepository;
 import com.olucaseduardo.zoomatech_api.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public class MemberService {
     private final RoleRepository roleRepository;
     private final StorageService storageService;
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Member create(CreateMemberRequestDTO request) throws IOException {
         Role role = roleRepository.findById(request.role())
                 .orElseThrow(() -> new ResourceNotFoundException("Função não encontrada com id " + request.role()));
@@ -47,10 +49,12 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Member save(Member team) {
         return memberRepository.save(team);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void deleteById(UUID id) {
         Member team = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membro do time não encontrado com id " + id));
@@ -58,6 +62,7 @@ public class MemberService {
         this.memberRepository.delete(team);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Member update(UUID id, CreateMemberRequestDTO request) throws IOException {
         Member existingTeam = memberRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Membro do time não encontrado com id " + id));

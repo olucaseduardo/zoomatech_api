@@ -26,28 +26,51 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-h2console'
+
+    // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    
+    // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    
+    // WebMVC
     implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+    
+    // Flyway
     implementation 'org.springframework.boot:spring-boot-starter-flyway'
-    runtimeOnly 'org.flywaydb:flyway-database-postgresql'
+    
+    // Driver do PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+    
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    
+    // Testes
     testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-validation-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    
+    // AWS S3
     implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
     implementation 'com.amazonaws:aws-java-sdk-s3'
 
+    // JWT
     implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    
+    // Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
 }
 
 tasks.named('test') {

@@ -5,6 +5,7 @@ import com.olucaseduardo.zoomatech_api.dto.service.UpdateServiceRequestDTO;
 import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class ServiceService {
 
     private final ServiceRepository serviceRepository;
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public com.olucaseduardo.zoomatech_api.entity.Service create(CreateServiceRequestDTO data) {
         var service = com.olucaseduardo.zoomatech_api.entity.Service.builder()
                 .name(data.name())
@@ -30,6 +32,7 @@ public class ServiceService {
         return this.serviceRepository.findById(id).isPresent() ? this.serviceRepository.findById(id).get() : null;
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void deleteById(UUID id) {
         this.serviceRepository.deleteById(id);
     }
@@ -39,6 +42,7 @@ public class ServiceService {
     }
 
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public com.olucaseduardo.zoomatech_api.entity.Service update(UUID id, UpdateServiceRequestDTO data) {
         com.olucaseduardo.zoomatech_api.entity.Service service = this.serviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado com id " + id));
 

@@ -10,6 +10,7 @@ import com.olucaseduardo.zoomatech_api.exceptions.BadRequestException;
 import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.EventoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -40,10 +41,12 @@ public class EventoService {
         return new EventosClassificadosResponseDTO(participacao, realizados);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void delete(UUID id) {
         this.eventoRepository.deleteById(id);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Evento create(CreateEventoRequestDTO request) throws IOException {
         LocalDate startDate = LocalDate.parse(request.startDate());
         LocalDate endDate = LocalDate.parse(request.endDate());
@@ -67,6 +70,7 @@ public class EventoService {
         return this.eventoRepository.save(evento);
     }
 
+    @CacheEvict(cacheNames = "homepage", allEntries = true)
     public Evento update(UUID id, UpdateEventoRequestDTO request) throws IOException {
         Evento evento = this.eventoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado com o ID " + id));
