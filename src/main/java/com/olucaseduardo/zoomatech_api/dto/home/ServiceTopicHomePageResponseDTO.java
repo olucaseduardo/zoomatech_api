@@ -2,6 +2,7 @@ package com.olucaseduardo.zoomatech_api.dto.home;
 
 import com.olucaseduardo.zoomatech_api.entity.ServiceTopic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ServiceTopicHomePageResponseDTO(
@@ -10,6 +11,6 @@ public record ServiceTopicHomePageResponseDTO(
         List<String> items
 ) {
     public ServiceTopicHomePageResponseDTO(ServiceTopic topic) {
-        this(topic.getTopic(),topic.getDescription(),topic.getItems());
+        this(topic.getTopic(), topic.getDescription(), topic.getItems() != null ? new ArrayList<>(topic.getItems()) : List.of());
     }
 }

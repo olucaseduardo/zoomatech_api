@@ -8,6 +8,7 @@ import com.olucaseduardo.zoomatech_api.entity.SystemConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class HomeService {
     private final SystemConfigurationService systemConfigurationService;
     private final EventoService eventoService;
 
+    @Transactional(readOnly = true)
     @Cacheable(cacheNames = "homepage", key = "'default'")
     public HomePageResponseDTO findHomePageData() {
         List<Member> members = this.memberService.findAll();
