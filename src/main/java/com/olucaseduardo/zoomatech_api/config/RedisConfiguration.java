@@ -1,5 +1,10 @@
 package com.olucaseduardo.zoomatech_api.config;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.olucaseduardo.zoomatech_api.util.CacheProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -35,10 +40,21 @@ public class RedisConfiguration {
 
     @Bean
     public RedisCacheConfiguration cacheConfiguration() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        objectMapper.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.EVERYTHING,
+                JsonTypeInfo.As.PROPERTY
+        );
+
+        var serializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+
         return RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofDays(30))
                 .disableCachingNullValues()
                 .serializeKeysWith(SerializationPair.fromSerializer(new StringRedisSerializer()))
-                .serializeValuesWith(SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(SerializationPair.fromSerializer(serializer));
     }
 }
