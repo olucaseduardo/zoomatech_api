@@ -39,6 +39,8 @@ public class SecurityConfiguration {
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/public/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/health").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/editais/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/events/**").permitAll()
                         .anyRequest().authenticated())
                 .cors(c -> c.configurationSource(customCorsConfiguration))
                 .authenticationProvider(authenticationProvider())

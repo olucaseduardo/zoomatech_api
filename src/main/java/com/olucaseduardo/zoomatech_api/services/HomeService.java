@@ -1,5 +1,6 @@
 package com.olucaseduardo.zoomatech_api.services;
 
+import com.olucaseduardo.zoomatech_api.dto.edital.EditalResponseDTO;
 import com.olucaseduardo.zoomatech_api.dto.evento.EventosClassificadosResponseDTO;
 import com.olucaseduardo.zoomatech_api.dto.home.*;
 import com.olucaseduardo.zoomatech_api.dto.work_performed.WorkPerformedResponseDTO;
@@ -21,6 +22,7 @@ public class HomeService {
     private final MemberService memberService;
     private final SystemConfigurationService systemConfigurationService;
     private final EventoService eventoService;
+    private final EditalService editalService;
 
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = "homepage", key = "'default'")
@@ -30,12 +32,13 @@ public class HomeService {
         List<SystemConfiguration> systemConfigurations = this.systemConfigurationService.fetchAll();
         List<com.olucaseduardo.zoomatech_api.entity.Service> services = this.serviceService.findAll();
         EventosClassificadosResponseDTO eventos = this.eventoService.findAll();
+        List<EditalResponseDTO> editais = this.editalService.findAll();
 
         var membersDTO = members.stream().map(MemberHomePageResponseDTO::new).toList();
         var workPerformedsDTO = workPerformeds.stream().map(WorkPerformedHomePageResponseDTO::new).toList();
         var systemConfigurationsDTO = systemConfigurations.stream().map(SystemConfigurationHomePageDTO::new).toList();
         var servicesDTO = services.stream().map(ServiceHomePageResponseDTO::new).toList();
 
-        return new HomePageResponseDTO(membersDTO, workPerformedsDTO, systemConfigurationsDTO, servicesDTO, eventos);
+        return new HomePageResponseDTO(membersDTO, workPerformedsDTO, systemConfigurationsDTO, servicesDTO, eventos, editais);
     }
 }
