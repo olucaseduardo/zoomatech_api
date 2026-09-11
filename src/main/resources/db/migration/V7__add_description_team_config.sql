@@ -1,3 +1,6 @@
+ALTER TABLE system_configuration ALTER COLUMN value TYPE TEXT;
+ALTER TABLE system_configuration ALTER COLUMN description TYPE TEXT;
+
 INSERT INTO system_configuration (id, key, value, description, created_at, updated_at)
 VALUES (
     gen_random_uuid(),
@@ -7,4 +10,7 @@ VALUES (
     CURRENT_TIMESTAMP,
     CURRENT_TIMESTAMP
 )
-ON CONFLICT (key) DO NOTHING;
+ON CONFLICT (key) DO UPDATE
+SET value = EXCLUDED.value,
+    description = EXCLUDED.description,
+    updated_at = CURRENT_TIMESTAMP;
