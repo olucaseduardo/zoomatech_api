@@ -14,7 +14,6 @@ public record EditalTimelineResponseDTO(
         String descricao,
         LocalDate dataEvento,
         String arquivoPath,
-        String arquivoUrl,
         String nomeOriginal,
         String contentType,
         Long tamanhoBytes,
@@ -23,10 +22,6 @@ public record EditalTimelineResponseDTO(
         LocalDateTime createdAt
 ) {
     public EditalTimelineResponseDTO(EditalTimeline item) {
-        this(item, null);
-    }
-
-    public EditalTimelineResponseDTO(EditalTimeline item, String arquivoUrl) {
         this(
                 item.getId(),
                 item.getTitulo(),
@@ -34,7 +29,6 @@ public record EditalTimelineResponseDTO(
                 item.getDescricao(),
                 item.getDataEvento(),
                 item.getArquivoPath(),
-                arquivoUrl != null ? arquivoUrl : item.getArquivoPath(),
                 item.getNomeOriginal(),
                 item.getContentType(),
                 item.getTamanhoBytes(),

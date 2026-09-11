@@ -44,50 +44,11 @@ public class EditalService {
     }
 
     public EditalResponseDTO toDTO(Edital edital) {
-        String arquivoUrl = storageService.generatePresignedUrl(edital.getArquivoPath(), 120);
-        List<EditalTimelineResponseDTO> timelineDTO = edital.getTimeline() != null
-                ? edital.getTimeline().stream().map(this::toTimelineDTO).toList()
-                : List.of();
-        return new EditalResponseDTO(
-                edital.getId(),
-                edital.getTitulo(),
-                edital.getNumeroEdital(),
-                edital.getDescricao(),
-                edital.getStatus(),
-                edital.getCategoria(),
-                edital.getArquivoPath(),
-                arquivoUrl,
-                edital.getNomeOriginal(),
-                edital.getContentType(),
-                edital.getTamanhoBytes(),
-                edital.getDataPublicacao(),
-                edital.getDataEncerramento(),
-                edital.getLinkInscricao(),
-                timelineDTO,
-                edital.getCreatedAt(),
-                edital.getUpdatedAt()
-        );
+        return new EditalResponseDTO(edital);
     }
 
     public EditalTimelineResponseDTO toTimelineDTO(EditalTimeline item) {
-        String arquivoUrl = item.getArquivoPath() != null
-                ? storageService.generatePresignedUrl(item.getArquivoPath(), 120)
-                : null;
-        return new EditalTimelineResponseDTO(
-                item.getId(),
-                item.getTitulo(),
-                item.getTipo(),
-                item.getDescricao(),
-                item.getDataEvento(),
-                item.getArquivoPath(),
-                arquivoUrl,
-                item.getNomeOriginal(),
-                item.getContentType(),
-                item.getTamanhoBytes(),
-                item.getLinkExterno(),
-                item.isDestaque(),
-                item.getCreatedAt()
-        );
+        return new EditalTimelineResponseDTO(item);
     }
 
     @Transactional(readOnly = true)
