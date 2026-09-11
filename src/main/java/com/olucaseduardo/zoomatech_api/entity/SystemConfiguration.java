@@ -25,10 +25,10 @@ public class SystemConfiguration {
     @Column(unique = true, nullable = false, updatable = false)
     private String key;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String value;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @CreationTimestamp
