@@ -28,7 +28,7 @@ public class EditalService {
     public List<EditalResponseDTO> findAll() {
         return this.editalRepository.findAllByOrderByDataPublicacaoDesc()
                 .stream()
-                .map(EditalResponseDTO::new)
+                .map(this::toDTO)
                 .toList();
     }
 
@@ -40,7 +40,73 @@ public class EditalService {
 
     @Transactional(readOnly = true)
     public EditalResponseDTO findDTOById(UUID id) {
-        return new EditalResponseDTO(findById(id));
+        return toDTO(findById(id));
+    }
+
+    public EditalResponseDTO toDTO(Edital edital) {
+        String arquivoUrl = storageService.generatePresignedUrl(edital.getArquivoPath(), 120);
+        List<EditalTimelineResponseDTO> timelineDTO = edital.getTimeline() != null
+                ? edital.getTimeline().stream().map(this::toTimelineDTO).toList()
+                : List.of();
+        return new EditalResponseDTO(
+                edital.getId(),
+                edital.getTitulo(),
+                edital.getNumeroEdital(),
+                edital.getDescricao(),
+                edital.getStatus(),
+                edital.getCategoria(),
+                edital.getArquivoPath(),
+                arquivoUrl,
+                edital.getNomeOriginal(),
+                edital.getContentType(),
+                edital.getTamanhoBytes(),
+                edital.getDataPublicacao(),
+                edital.getDataEncerramento(),
+                edital.getLinkInscricao(),
+                timelineDTO,
+                edital.getCreatedAt(),
+                edital.getUpdatedAt()
+        );
+    }
+
+    public EditalTimelineResponseDTO toTimelineDTO(EditalTimeline item) {
+        String arquivoUrl = item.getArquivoPath() != null
+                ? storageService.generatePresignedUrl(item.getArquivoPath(), 120)
+                : null;
+        return new EditalTimelineResponseDTO(
+                item.getId(),
+                item.getTitulo(),
+                item.getTipo(),
+                item.getDescricao(),
+                item.getDataEvento(),
+                item.getArquivoPath(),
+                arquivoUrl,
+                item.getNomeOriginal(),
+                item.getContentType(),
+                item.getTamanhoBytes(),
+                item.getLinkExterno(),
+                item.isDestaque(),
+                item.getCreatedAt()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public String getDownloadUrl(UUID editalId) {
+        Edital edital = findById(editalId);
+        return storageService.generatePresignedUrl(edital.getArquivoPath(), 60);
+    }
+
+    @Transactional(readOnly = true)
+    public String getTimelineDownloadUrl(UUID editalId, UUID itemId) {
+        Edital edital = findById(editalId);
+        EditalTimeline item = edital.getTimeline().stream()
+                .filter(t -> t.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Item da timeline não encontrado com o ID " + itemId));
+        if (item.getArquivoPath() == null || item.getArquivoPath().isBlank()) {
+            throw new BadRequestException("Este item da timeline não possui arquivo anexado.");
+        }
+        return storageService.generatePresignedUrl(item.getArquivoPath(), 60);
     }
 
     @Transactional
@@ -200,7 +266,7 @@ public class EditalService {
                 .build();
 
         EditalTimeline saved = this.editalTimelineRepository.save(item);
-        return new EditalTimelineResponseDTO(saved);
+        return toTimelineDTO(saved);
     }
 
     @Transactional
@@ -239,7 +305,7 @@ public class EditalService {
         }
 
         EditalTimeline saved = this.editalTimelineRepository.save(item);
-        return new EditalTimelineResponseDTO(saved);
+        return toTimelineDTO(saved);
     }
 
     @Transactional

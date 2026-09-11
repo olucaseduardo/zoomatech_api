@@ -17,6 +17,7 @@ public record EditalResponseDTO(
         StatusEdital status,
         CategoriaEdital categoria,
         String arquivoPath,
+        String arquivoUrl,
         String nomeOriginal,
         String contentType,
         Long tamanhoBytes,
@@ -28,6 +29,10 @@ public record EditalResponseDTO(
         LocalDateTime updatedAt
 ) {
     public EditalResponseDTO(Edital edital) {
+        this(edital, null);
+    }
+
+    public EditalResponseDTO(Edital edital, String arquivoUrl) {
         this(
                 edital.getId(),
                 edital.getTitulo(),
@@ -36,6 +41,7 @@ public record EditalResponseDTO(
                 edital.getStatus(),
                 edital.getCategoria(),
                 edital.getArquivoPath(),
+                arquivoUrl != null ? arquivoUrl : edital.getArquivoPath(),
                 edital.getNomeOriginal(),
                 edital.getContentType(),
                 edital.getTamanhoBytes(),

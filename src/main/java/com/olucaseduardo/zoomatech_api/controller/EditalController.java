@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,22 @@ public class EditalController {
     public ResponseEntity<ApiResponse<EditalResponseDTO>> findById(@PathVariable UUID id) {
         EditalResponseDTO edital = editalService.findDTOById(id);
         return ResponseEntity.ok(ResponseUtil.success("Edital encontrado com sucesso!", edital, null));
+    }
+
+    @GetMapping("/{id}/download")
+    public ResponseEntity<Void> downloadEdital(@PathVariable UUID id) {
+        String url = editalService.getDownloadUrl(id);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(url))
+                .build();
+    }
+
+    @GetMapping("/{id}/timeline/{itemId}/download")
+    public ResponseEntity<Void> downloadTimelineItem(@PathVariable UUID id, @PathVariable UUID itemId) {
+        String url = editalService.getTimelineDownloadUrl(id, itemId);
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(url))
+                .build();
     }
 
     @PostMapping
