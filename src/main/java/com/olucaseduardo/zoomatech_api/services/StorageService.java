@@ -15,7 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,7 +37,7 @@ public class StorageService {
         File tempFile = null;
         try {
             tempFile = Files.createTempFile("upload-", ".tmp").toFile();
-            file.transferTo(tempFile);
+            Files.copy(file.getInputStream(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(tempFile.length());
@@ -65,11 +68,17 @@ public class StorageService {
     }
 
     public Optional<String> uploadDocument(MultipartFile file, String folder) {
-        String originalName = file.getOriginalFilename() != null ? file.getOriginalFilename() : "document.pdf";
+        String rawOriginalName = file.getOriginalFilename() != null ? file.getOriginalFilename().trim() : "document.pdf";
+        // Remove eventuais quebras de linha ou caracteres perigosos no nome original
+        String originalName = rawOriginalName.replaceAll("[\\r\\n]+", "").trim();
+
         String extension = "";
         int dotIdx = originalName.lastIndexOf('.');
         if (dotIdx >= 0) {
-            extension = originalName.substring(dotIdx);
+            extension = originalName.substring(dotIdx).replaceAll("[^a-zA-Z0-9.]", "").toLowerCase();
+        }
+        if (extension.isBlank()) {
+            extension = ".pdf";
         }
 
         String hashName = UUID.randomUUID().toString().replace("-", "") + extension;
@@ -77,8 +86,8 @@ public class StorageService {
         File tempFile = null;
 
         try {
-            tempFile = Files.createTempFile("doc-", extension).toFile();
-            file.transferTo(tempFile);
+            tempFile = Files.createTempFile("doc-", ".tmp").toFile();
+            Files.copy(file.getInputStream(), tempFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(tempFile.length());
@@ -90,7 +99,11 @@ public class StorageService {
                 contentType = "application/pdf";
             }
             metadata.setContentType(contentType);
-            metadata.setContentDisposition("inline; filename=\"" + originalName + "\"");
+
+            // Sanitização do cabeçalho Content-Disposition para evitar erro com espaços e acentos no S3/R2
+            String safeAscii = originalName.replaceAll("[^a-zA-Z0-9._-]", "_");
+            String encodedName = URLEncoder.encode(originalName, StandardCharsets.UTF_8).replace("+", "%20");
+            metadata.setContentDisposition("inline; filename=\"" + safeAscii + "\"; filename*=UTF-8''" + encodedName);
 
             PutObjectRequest putRequest = new PutObjectRequest(this.bucketName, newPath, tempFile);
             putRequest.setMetadata(metadata);
