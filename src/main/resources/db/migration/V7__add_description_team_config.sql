@@ -14,3 +14,17 @@ ON CONFLICT (key) DO UPDATE
 SET value = EXCLUDED.value,
     description = EXCLUDED.description,
     updated_at = CURRENT_TIMESTAMP;
+
+INSERT INTO system_configuration (id, key, value, description, created_at, updated_at)
+VALUES (
+    gen_random_uuid(),
+    'HERO_DESCRIPTION',
+    'Conectando o conhecimento acadêmico à prática no campo. Somos a ponte entre a universidade e o produtor rural, promovendo soluções inovadoras e sustentáveis para o agronegócio.',
+    'Descrição / slogan exibido na seção inicial (Hero) da página principal',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+)
+ON CONFLICT (key) DO UPDATE
+SET value = EXCLUDED.value,
+    description = EXCLUDED.description,
+    updated_at = CURRENT_TIMESTAMP;
