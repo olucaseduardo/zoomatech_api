@@ -14,26 +14,27 @@ RUN ./gradlew dependencies --no-daemon
 COPY src src
 RUN ./gradlew build -x test --no-daemon
 
-# Estágio 2: Runtime (Apenas o JRE mínimo sobre Alpine)
-FROM eclipse-temurin:21-jre-alpine
+# Estágio 2: Runtime (IBM Semeru OpenJ9 - 50% menos consumo de RAM)
+FROM ibm-semeru-runtimes:open-21-jre-jammy
 WORKDIR /app
 
-# Cria um usuário não-root por segurança (boa prática para produção)
-RUN addgroup -S spring && adduser -S spring -G spring
+# Cria um usuário não-root por segurança
+RUN groupadd -r spring && useradd -r -g spring spring
 USER spring:spring
 
 # Copia o JAR do estágio de build
 COPY --from=build /app/build/libs/*SNAPSHOT.jar app.jar
 
-# Expõe a porta
-EXPOSE 8080
+# Expõe a porta 8081
+EXPOSE 8081
 
-# Flags otimizadas para containers pequenos e correção de rede
-# -XX:+UseSerialGC: Economiza CPU/RAM em instâncias com < 1GB
-# -Xmx384m: Define o limite de memória abaixo do limite do Render para evitar crash
+# Flags do OpenJ9 otimizadas para baixo consumo de memória em containers
 ENTRYPOINT ["java", \
+            "-Xtune:virtualized", \
+            "-Xquickstart", \
+            "-Xshareclasses:name=app_share,cacheDir=/tmp", \
+            "-Xscmx60m", \
+            "-Xms32m", \
+            "-Xmx160m", \
             "-Djava.net.preferIPv4Stack=true", \
-            "-XX:+UseSerialGC", \
-            "-Xss256k", \
-            "-Xmx384m", \
             "-jar", "app.jar"]
