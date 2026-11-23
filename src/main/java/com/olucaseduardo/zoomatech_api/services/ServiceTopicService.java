@@ -8,6 +8,7 @@ import com.olucaseduardo.zoomatech_api.repository.ServiceTopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,15 +21,18 @@ public class ServiceTopicService {
     private final ServiceTopicRepository serviceTopicRepository;
     private final ServiceRepository serviceRepository;
 
+    @Transactional(readOnly = true)
     public List<ServiceTopic> findAll() {
         return serviceTopicRepository.findAllByOrderByCreatedAtAsc();
     }
 
+    @Transactional(readOnly = true)
     public ServiceTopic findById(UUID id) {
         Optional<ServiceTopic> serviceTopic = serviceTopicRepository.findById(id);
         return serviceTopic.orElse(null);
     }
 
+    @Transactional
     @CacheEvict(cacheNames = "homepage", allEntries = true)
     public ServiceTopic create(UUID serviceId, CreateServiceTopicRequestDTO request) {
         com.olucaseduardo.zoomatech_api.entity.Service service = this.serviceRepository.findById(serviceId).orElseThrow(() -> new ResourceNotFoundException("Serviço com o ID " + serviceId + " não encontrado.")
@@ -44,6 +48,7 @@ public class ServiceTopicService {
         return this.serviceTopicRepository.save(serviceTopic);
     }
 
+    @Transactional
     @CacheEvict(cacheNames = "homepage", allEntries = true)
     public ServiceTopic update(UUID id, CreateServiceTopicRequestDTO request) {
         ServiceTopic serviceTopic = this.serviceTopicRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Tópico de serviço com ID" + id + " não encontrado."));
@@ -54,11 +59,13 @@ public class ServiceTopicService {
                 .service(serviceTopic.getService())
                 .items(request.items())
                 .description(request.description())
+                .createdAt(serviceTopic.getCreatedAt())
                 .build();
 
         return this.serviceTopicRepository.save(updateServiceTopic);
     }
 
+    @Transactional
     @CacheEvict(cacheNames = "homepage", allEntries = true)
     public void delete(UUID id) {
         this.serviceTopicRepository.deleteById(id);
