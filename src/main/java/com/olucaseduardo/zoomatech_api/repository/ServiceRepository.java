@@ -11,10 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface ServiceRepository extends JpaRepository<Service, UUID> {
-    @EntityGraph(attributePaths = {"serviceTopic", "serviceTopic.items", "workPerformeds"})
+    @EntityGraph(attributePaths = {"serviceTopic", "workPerformeds"})
     List<Service> findAllByOrderByCreatedAtAsc();
 
     @Override
-    @EntityGraph(attributePaths = {"serviceTopic", "serviceTopic.items", "workPerformeds"})
+    @EntityGraph(attributePaths = {"serviceTopic", "workPerformeds"})
     Optional<Service> findById(UUID id);
 }

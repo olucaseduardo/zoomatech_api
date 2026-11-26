@@ -1,5 +1,7 @@
 package com.olucaseduardo.zoomatech_api;
 
+import com.olucaseduardo.zoomatech_api.dto.service.CreateServiceTopicRequestDTO;
+import com.olucaseduardo.zoomatech_api.dto.service.UpdateServiceRequestDTO;
 import com.olucaseduardo.zoomatech_api.dto.work_performed.WorkPerformedResponseDTO;
 import com.olucaseduardo.zoomatech_api.entity.Service;
 import com.olucaseduardo.zoomatech_api.entity.ServiceTopic;
@@ -7,6 +9,8 @@ import com.olucaseduardo.zoomatech_api.entity.WorkPerformed;
 import com.olucaseduardo.zoomatech_api.repository.ServiceRepository;
 import com.olucaseduardo.zoomatech_api.repository.ServiceTopicRepository;
 import com.olucaseduardo.zoomatech_api.repository.WorkPerformedRepository;
+import com.olucaseduardo.zoomatech_api.services.ServiceService;
+import com.olucaseduardo.zoomatech_api.services.ServiceTopicService;
 import org.hibernate.Hibernate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +36,11 @@ import static org.assertj.core.api.Assertions.assertThat;
         "spring.jpa.hibernate.ddl-auto=create-drop",
         "spring.jpa.open-in-view=false"
 })
-@Import(LazyLoadingOpenInViewFalseTest.TestCacheConfig.class)
+@Import({
+        LazyLoadingOpenInViewFalseTest.TestCacheConfig.class,
+        ServiceService.class,
+        ServiceTopicService.class
+})
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
 class LazyLoadingOpenInViewFalseTest {
 
@@ -52,6 +60,12 @@ class LazyLoadingOpenInViewFalseTest {
 
     @Autowired
     private WorkPerformedRepository workPerformedRepository;
+
+    @Autowired
+    private ServiceService serviceService;
+
+    @Autowired
+    private ServiceTopicService serviceTopicService;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -89,6 +103,14 @@ class LazyLoadingOpenInViewFalseTest {
                     .services(Set.of(savedService))
                     .build());
 
+            workPerformedRepository.save(WorkPerformed.builder()
+                    .title("Projeto Fazenda Y")
+                    .description("Segundo projeto")
+                    .performedAt("2026-02")
+                    .photo("photo2.jpg")
+                    .services(Set.of(savedService))
+                    .build());
+
             return new UUID[]{savedService.getId(), savedTopic.getId(), savedWork.getId()};
         });
 
@@ -99,7 +121,7 @@ class LazyLoadingOpenInViewFalseTest {
 
         // 1. WorkPerformedRepository outside any transaction / Hibernate session
         List<WorkPerformed> works = workPerformedRepository.findAllByOrderByCreatedAtDesc();
-        assertThat(works).hasSize(1);
+        assertThat(works).hasSize(2);
         assertThat(Hibernate.isInitialized(works.get(0).getServices())).isTrue();
         WorkPerformedResponseDTO dto = new WorkPerformedResponseDTO(works.get(0));
         assertThat(dto.services()).hasSize(1);
@@ -109,28 +131,53 @@ class LazyLoadingOpenInViewFalseTest {
         assertThat(Hibernate.isInitialized(workById.getServices())).isTrue();
         assertThat(workById.getServices()).hasSize(1);
 
-        // 2. ServiceRepository outside any transaction / Hibernate session
-        List<Service> services = serviceRepository.findAllByOrderByCreatedAtAsc();
+        // 2. ServiceService outside any transaction / Hibernate session (with multiple workPerformeds!)
+        List<Service> services = serviceService.findAll();
         assertThat(services).hasSize(1);
         assertThat(Hibernate.isInitialized(services.get(0).getWorkPerformeds())).isTrue();
-        assertThat(services.get(0).getWorkPerformeds()).hasSize(1);
+        assertThat(services.get(0).getWorkPerformeds()).hasSize(2);
         assertThat(Hibernate.isInitialized(services.get(0).getServiceTopic())).isTrue();
         ServiceTopic loadedTopicFromService = services.get(0).getServiceTopic().iterator().next();
         assertThat(Hibernate.isInitialized(loadedTopicFromService.getItems())).isTrue();
         assertThat(loadedTopicFromService.getItems()).containsExactly("Item 1", "Item 2");
 
-        Service serviceById = serviceRepository.findById(serviceId).orElseThrow();
+        Service serviceById = serviceService.findById(serviceId);
+        assertThat(serviceById).isNotNull();
         assertThat(Hibernate.isInitialized(serviceById.getWorkPerformeds())).isTrue();
-        assertThat(serviceById.getWorkPerformeds()).hasSize(1);
+        assertThat(serviceById.getWorkPerformeds()).hasSize(2);
+        ServiceTopic loadedTopicById = serviceById.getServiceTopic().iterator().next();
+        assertThat(Hibernate.isInitialized(loadedTopicById.getItems())).isTrue();
+        assertThat(loadedTopicById.getItems()).containsExactly("Item 1", "Item 2");
 
-        // 3. ServiceTopicRepository outside any transaction / Hibernate session
-        List<ServiceTopic> topics = serviceTopicRepository.findAllByOrderByCreatedAtAsc();
-        assertThat(topics).hasSize(1);
-        assertThat(Hibernate.isInitialized(topics.get(0).getItems())).isTrue();
-        assertThat(topics.get(0).getItems()).containsExactly("Item 1", "Item 2");
+        // 3. ServiceTopicService update & fetch outside any transaction / Hibernate session
+        ServiceTopic updatedTopic = serviceTopicService.update(
+                topicId,
+                new CreateServiceTopicRequestDTO("Manejo Atualizado", "Nova desc", List.of("Item 1", "Item 2", "Item 3"))
+        );
+        assertThat(Hibernate.isInitialized(updatedTopic.getItems())).isTrue();
+        assertThat(updatedTopic.getItems()).containsExactly("Item 1", "Item 2", "Item 3");
 
-        ServiceTopic topicById = serviceTopicRepository.findById(topicId).orElseThrow();
-        assertThat(Hibernate.isInitialized(topicById.getItems())).isTrue();
-        assertThat(topicById.getItems()).containsExactly("Item 1", "Item 2");
+        ServiceTopic topicAfterUpdate = serviceTopicService.findById(topicId);
+        assertThat(Hibernate.isInitialized(topicAfterUpdate.getItems())).isTrue();
+        assertThat(topicAfterUpdate.getItems()).containsExactly("Item 1", "Item 2", "Item 3");
+
+        Service serviceAfterTopicUpdate = serviceService.findById(serviceId);
+        ServiceTopic topicFromServiceAfterUpdate = serviceAfterTopicUpdate.getServiceTopic().iterator().next();
+        assertThat(topicFromServiceAfterUpdate.getItems()).containsExactly("Item 1", "Item 2", "Item 3");
+
+        // 4. Repeated topic update and ServiceService update should never duplicate items
+        ServiceTopic updatedTopicAgain = serviceTopicService.update(
+                topicId,
+                new CreateServiceTopicRequestDTO("Manejo Atualizado 2", "Desc 2", List.of("Item 1", "Item 2", "Item 3"))
+        );
+        assertThat(updatedTopicAgain.getItems()).containsExactly("Item 1", "Item 2", "Item 3");
+
+        Service updatedService = serviceService.update(
+                serviceId,
+                new UpdateServiceRequestDTO("icon2.svg", "Desc atualizada", "Consultoria 2")
+        );
+        ServiceTopic topicAfterServiceUpdate = updatedService.getServiceTopic().iterator().next();
+        assertThat(Hibernate.isInitialized(topicAfterServiceUpdate.getItems())).isTrue();
+        assertThat(topicAfterServiceUpdate.getItems()).containsExactly("Item 1", "Item 2", "Item 3");
     }
 }

@@ -5,6 +5,7 @@ import com.olucaseduardo.zoomatech_api.dto.service.UpdateServiceRequestDTO;
 import com.olucaseduardo.zoomatech_api.exceptions.ResourceNotFoundException;
 import com.olucaseduardo.zoomatech_api.repository.ServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,12 @@ import java.util.UUID;
 public class ServiceService {
 
     private final ServiceRepository serviceRepository;
+
+    private void initializeTopicItems(com.olucaseduardo.zoomatech_api.entity.Service service) {
+        if (service != null && service.getServiceTopic() != null) {
+            service.getServiceTopic().forEach(topic -> Hibernate.initialize(topic.getItems()));
+        }
+    }
 
     @Transactional
     @CacheEvict(cacheNames = "homepage", allEntries = true)
@@ -32,7 +39,9 @@ public class ServiceService {
 
     @Transactional(readOnly = true)
     public com.olucaseduardo.zoomatech_api.entity.Service findById(UUID id) {
-        return this.serviceRepository.findById(id).orElse(null);
+        com.olucaseduardo.zoomatech_api.entity.Service service = this.serviceRepository.findById(id).orElse(null);
+        initializeTopicItems(service);
+        return service;
     }
 
     @Transactional
@@ -43,7 +52,9 @@ public class ServiceService {
 
     @Transactional(readOnly = true)
     public List<com.olucaseduardo.zoomatech_api.entity.Service> findAll() {
-        return this.serviceRepository.findAllByOrderByCreatedAtAsc();
+        List<com.olucaseduardo.zoomatech_api.entity.Service> services = this.serviceRepository.findAllByOrderByCreatedAtAsc();
+        services.forEach(this::initializeTopicItems);
+        return services;
     }
 
 
@@ -51,6 +62,7 @@ public class ServiceService {
     @CacheEvict(cacheNames = "homepage", allEntries = true)
     public com.olucaseduardo.zoomatech_api.entity.Service update(UUID id, UpdateServiceRequestDTO data) {
         com.olucaseduardo.zoomatech_api.entity.Service service = this.serviceRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Serviço não encontrado com id " + id));
+        initializeTopicItems(service);
 
         com.olucaseduardo.zoomatech_api.entity.Service.ServiceBuilder builder = com.olucaseduardo.zoomatech_api.entity.Service.builder();
 
@@ -64,6 +76,8 @@ public class ServiceService {
 
         com.olucaseduardo.zoomatech_api.entity.Service updateService = builder.build();
 
-        return this.serviceRepository.save(updateService);
+        com.olucaseduardo.zoomatech_api.entity.Service saved = this.serviceRepository.save(updateService);
+        initializeTopicItems(saved);
+        return saved;
     }
 }

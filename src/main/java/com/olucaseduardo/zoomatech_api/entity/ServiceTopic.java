@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -33,6 +34,7 @@ public class ServiceTopic {
     private String description;
 
     @ElementCollection
+    @BatchSize(size = 50)
     private List<String> items;
 
     @ManyToOne(fetch = FetchType.LAZY)
